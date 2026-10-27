@@ -1,35 +1,53 @@
-# Unix Shell
+# Unix Shell in C
 
-A Unix-style shell written in C as part of a university systems programming project. 
+A lightweight command-line shell built from scratch in C for a university systems programming module. It reads commands, runs programs, and keeps its own state between sessions, much like the shells we use every day.
 
-The shell supports the execution of external programs together with a range of built-in commands including changing directories, history management, aliases, and environment path configuration.
+## Overview
 
----
+The shell works as a classic read, parse, execute loop. Each line you type is split into tokens, checked against the built-in commands, and, if it isn't one, launched as an external program in a child process.
 
-## 🚀 Features
+## What It Can Do
 
-* **Process Management:** Execution of external programs using process creation via `fork`, `exec`, and `wait`.
-* **Built-in Commands:** Native support for `cd`, `getpath`, `setpath`, `history`, `alias`, and `unalias`.
-* **Environment Management:** Full PATH and HOME environment configuration with both relative and absolute directory navigation.
-* **Persistence:** Persistent command history and alias tracking across sessions.
-* **Robust Parsing:** Advanced command parsing and tokenisation alongside comprehensive error handling for invalid commands and user input.
+**Running programs**
+Any program found on the PATH can be launched. The shell creates a child process with `fork`, replaces it with the requested program using `exec`, and waits for it to finish with `wait`.
 
----
+**Built-in commands**
 
-## 🛠️ Technologies Used
+| Command | Purpose |
+|---|---|
+| `cd` | Change directory (relative or absolute paths) |
+| `getpath` | Show the current PATH |
+| `setpath` | Replace the PATH with a new one |
+| `history` | View and reuse previous commands |
+| `alias` | Create a shortcut for a command |
+| `unalias` | Remove an existing alias |
 
-* **Language:** C
-* **API/Standard:** POSIX
-* **Platform:** Linux
-* **Concepts:** Process Management, System Calls, File I/O Persistence
+**Saved state**
+Command history and aliases are written to disk, so they are still there the next time you start the shell.
 
----
+**Input handling**
+Input is tokenised carefully, and invalid commands, bad arguments and failed lookups produce clear error messages instead of crashing the shell.
 
-## 🧠 What I Learned
+## Built With
 
-This project provided a deep, practical understanding of how Unix shells function internally. Key takeaways included:
-* Mastering low-level **process creation** and synchronization.
-* Implementing structured **command parsing** and string tokenisation algorithms.
-* Managing **environment variables** programmatically.
-* Handling **file persistence** in C to maintain user state across sessions.
-* Strengthening overall systems programming practices and writing highly modular, maintainable C code.
+- **C** (POSIX system calls)
+- **Linux**
+- Key ideas: process control, environment variables, file I/O
+
+## Getting Started
+
+```bash
+# Build
+make
+
+# Run
+./shell
+```
+
+## What This Project Taught Me
+
+- How a shell really works under the hood, from process creation to waiting on children
+- Writing a tokeniser and command parser by hand, without libraries doing the work
+- Reading and modifying environment variables such as PATH and HOME from code
+- Saving and reloading data with file I/O so the shell remembers its state
+- Splitting a C program into small, reusable modules that are easier to maintain
